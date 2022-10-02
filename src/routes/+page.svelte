@@ -1,7 +1,16 @@
 <script lang="ts">
     import { API } from "$lib/functions/api";
+    import { onMount } from "svelte";
 
-    let systemAddress = API.address;
+    let users = [{ username: "user" }];
+
+    onMount(async () => {
+        users = await API.fetch('/users');
+    })
 </script>
 
-<code>{systemAddress}</code>
+<ul>
+    {#each users as user}
+        <li>{user.username}</li>
+    {/each}
+</ul>
