@@ -1,5 +1,5 @@
 /**
- * @param {{ VITE_NET_ADDR: string; VITE_WEB_PORT: string; VITE_API_PORT: string; }} env
+ * @param {NodeJS.ProcessEnv} env
  * @return {NetAddress}
  */
 export function from(env)
@@ -11,8 +11,8 @@ export function from(env)
     ].join('');
 
     return {
-        web: base.concat(env.VITE_WEB_PORT),
-        api: base.concat(env.VITE_API_PORT),
+        web: base.concat(env.VITE_WEB_PORT || ''),
+        api: base.concat(env.VITE_API_PORT || ''),
     }
 }
 

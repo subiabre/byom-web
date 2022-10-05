@@ -1,27 +1,35 @@
-/**
- * The base URL of the API, e.g: `http://192.168.0.1:56903`
- */
-export const baseUrl = [
-    'http://',
-    import.meta.env.VITE_API_ADDR,
-    ':',
-    import.meta.env.VITE_API_PORT,
-].join('');
+import { from } from "$lib/net";
+
+export function createApiClient(env: NodeJS.ProcessEnv)
+{
+    const net = from(env);
+
+    return new ApiClient(net.api);
+}
 
 export interface RequestInitJson extends RequestInit
 {
     jsonBody: any
-} 
+}
 
-export const api = {
+export class ApiClient
+{
+    constructor(baseUrl: string)
+    {
+        this.baseUrl = baseUrl;
+    }
+
+    baseUrl: string = '';
+
     /**
      * Perform a fetch request to the API path
      * @param path Full path inside API, e.g: `/api/users`
      * @param init 
      * @returns
      */
-    fetch: async (path: string, init?: RequestInit) => {
-        return await fetch(baseUrl.concat(path), {
+    async fetch(path: string, init?: RequestInit)
+    {
+        return await fetch(this.baseUrl.concat(path), {
             ...init,
             credentials: 'include',
             headers: {
@@ -30,7 +38,7 @@ export const api = {
                 ...init?.headers,
             }
         });
-    },
+    }
 
     /**
      * Perform a GET request to the API path
@@ -38,12 +46,13 @@ export const api = {
      * @param init 'method' will be overriden to GET
      * @returns 
      */
-    get: async (path: string, init?: RequestInit) => {
-        return api.fetch(['/api', path].join(''), {
+    async get(path: string, init?: RequestInit)
+    {
+        return this.fetch(['/api', path].join(''), {
             ...init,
             method: 'GET'
         });
-    },
+    };
 
     /**
      * Perform a POST request to the API path using JSON
@@ -51,11 +60,12 @@ export const api = {
      * @param init 'body' will be encoded as JSON, 'method' will be overriden to POST
      * @returns 
      */
-    post: async (path: string, init?: RequestInitJson) => {
-        return api.fetch(['/api', path].join(''), {
+    async post(path: string, init?: RequestInitJson)
+    {
+        return this.fetch(['/api', path].join(''), {
             ...init,
             body: JSON.stringify(init?.jsonBody),
             method: 'POST'
         });
-    },
+    };
 }

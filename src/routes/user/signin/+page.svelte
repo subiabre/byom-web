@@ -1,9 +1,11 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { api } from "$lib/functions/api";
+    import { createApiClient } from "$lib/functions/api";
     import { onMount } from "svelte";
 
     export let data: { token?: string };
+
+    let api = createApiClient(import.meta.env);
 
     let username: string;
     let password: string;
