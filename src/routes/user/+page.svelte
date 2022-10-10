@@ -21,6 +21,8 @@
                         data.map((data: any) => {
                             return {
                                 ...data,
+                                dateCreated: new Date(data.dateCreated),
+                                dateExpires: new Date(data.dateExpires),
                                 userAgent: parser(data.userAgent),
                             };
                         })
@@ -40,7 +42,7 @@
 
 <div class="container mb-6">
     <h1 class="title">Hello, {user.username}.</h1>
-    <p class="subtitle">How you've been?.</p>
+    <p class="subtitle">How you've been?</p>
 </div>
 
 <div class="container">
@@ -48,13 +50,19 @@
         <h2 class="title is-4">Your sessions.</h2>
         {#each userSessions as userSession}
             <li class="block">
-                <p>
+                <h3 class="title is-6">
                     {userSession.userAgent.browser.name}
-                    {userSession.userAgent.browser.version} @
+                    {userSession.userAgent.browser.version} on
                     {userSession.userAgent.os.name}
-                </p>
-                <p>{userSession.dateCreated}</p>
-                <p>{userSession.dateExpires}</p>
+                </h3>
+                <div class="subtitle is-6">
+                    <p title={ userSession.dateCreated.toLocaleString() }>
+                        Created at: { userSession.dateCreated.toLocaleDateString() }
+                    </p>
+                    <p title={ userSession.dateExpires.toLocaleString() }>
+                        Expires at: { userSession.dateExpires.toLocaleDateString() }
+                    </p>
+                </div>
             </li>
         {/each}
     </ul>
