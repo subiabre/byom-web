@@ -19,6 +19,10 @@
     {
         switch (response.status) {
             case 204:
+                const user = await api.fetch(response.headers.get('Location') ?? '').then(res => res.json());
+
+                localStorage.setItem('byom:user', JSON.stringify(user));
+
                 return isLoggedIn();
             default:
                 break;
@@ -29,7 +33,7 @@
     {
         e.preventDefault();
 
-        const response = await api.post('/auth', { jsonBody: { username, password } });
+        const response = await api.post('/auth/user', { jsonBody: { username, password } });
         return handleLogin(response);
     }
 
@@ -39,7 +43,7 @@
             return handleLogin(response);
         }
 
-        const response = await api.get('/auth');
+        const response = await api.get('/auth/user');
         return handleLogin(response);
     });
 </script>

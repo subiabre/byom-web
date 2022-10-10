@@ -1,11 +1,12 @@
 <script lang="ts">
-    import { API } from "$lib/functions/api";
+    import { createApiClient } from "$lib/functions/api";
     import { onMount } from "svelte";
 
+    let api = createApiClient(import.meta.env);
     let users = [{ username: "user" }];
 
     onMount(async () => {
-        users = await API.fetch('/users');
+        users = await api.fetch('/users').then(res => res.json());
     })
 </script>
 
