@@ -34,8 +34,13 @@
 
 <div class="container">
     <ul>
+        <h2 class="title is-4">Your sessions.</h2>
         {#each userSessions as userSession}
-            <li>{ userSession.userAgent }</li>
+            <li class="block">
+                <p>{ userSession.userAgent }</p>
+                <p>{ userSession.dateCreated }</p>
+                <p>{ userSession.dateExpires }</p>
+            </li>
         {/each}
     </ul>
 </div>
