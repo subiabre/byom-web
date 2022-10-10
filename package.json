@@ -22,7 +22,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@types/ua-parser-js": "^0.7.36",
 		"dotenv": "^16.0.3",
-		"qrcode": "^1.5.1"
+		"qrcode": "^1.5.1",
+		"ua-parser-js": "^1.0.2"
 	}
 }
