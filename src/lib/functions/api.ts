@@ -1,10 +1,10 @@
-import { from } from "$lib/net";
+import { createNetFrom } from "$lib/net";
 
 export function createApiClient(env: NodeJS.ProcessEnv)
 {
-    const net = from(env);
+    const net = createNetFrom(env);
 
-    return new ApiClient(net.api);
+    return new ApiClient(net.api.addr);
 }
 
 export interface RequestInitJson extends RequestInit
