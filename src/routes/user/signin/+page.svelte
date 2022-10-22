@@ -1,6 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { createApiClient } from "$lib/functions/api";
+    import { socket } from "$lib/socket-io";
     import { onMount } from "svelte";
 
     export let data: { token?: string };
@@ -21,6 +22,7 @@
             case 204:
                 const user = await api.fetch(response.headers.get('Location') ?? '').then(res => res.json());
 
+                socket.emit('user:signin', user);
                 localStorage.setItem('byom:user', JSON.stringify(user));
 
                 return isLoggedIn();
