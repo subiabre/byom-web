@@ -1,13 +1,13 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { createApiClient } from "$lib/functions/api";
-    import { socket } from "$lib/socket-io";
+    import { createNetFrom } from "$lib/functions/net";
     import { user } from "$lib/stores/user";
     import { onMount } from "svelte";
 
     export let data: { token?: string };
 
-    let api = createApiClient(import.meta.env);
+    let api = createApiClient(createNetFrom(import.meta.env).api.addr);
 
     let username: string;
     let password: string;

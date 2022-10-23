@@ -1,21 +1,13 @@
-import { createNetFrom } from "$lib/net";
-
-export function createApiClient(env: NodeJS.ProcessEnv)
-{
-    const net = createNetFrom(env);
-
-    return new ApiClient(net.api.addr);
+export function createApiClient(host: string) {
+    return new ApiClient(host);
 }
 
-export interface RequestInitJson extends RequestInit
-{
+export interface RequestInitJson extends RequestInit {
     jsonBody: any
 }
 
-export class ApiClient
-{
-    constructor(baseUrl: string)
-    {
+export class ApiClient {
+    constructor(baseUrl: string) {
         this.baseUrl = baseUrl;
     }
 
@@ -27,8 +19,7 @@ export class ApiClient
      * @param init 
      * @returns
      */
-    async fetch(path: string, init?: RequestInit)
-    {
+    async fetch(path: string, init?: RequestInit) {
         return await fetch(this.baseUrl.concat(path), {
             ...init,
             credentials: 'include',
@@ -46,8 +37,7 @@ export class ApiClient
      * @param init 'method' will be overriden to GET
      * @returns 
      */
-    async get(path: string, init?: RequestInit)
-    {
+    async get(path: string, init?: RequestInit) {
         return this.fetch(['/api', path].join(''), {
             ...init,
             method: 'GET'
@@ -60,8 +50,7 @@ export class ApiClient
      * @param init 'body' will be encoded as JSON, 'method' will be overriden to POST
      * @returns 
      */
-    async post(path: string, init?: RequestInitJson)
-    {
+    async post(path: string, init?: RequestInitJson) {
         return this.fetch(['/api', path].join(''), {
             ...init,
             body: JSON.stringify(init?.jsonBody),

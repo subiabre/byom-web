@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-import * as net from "../src/lib/net.js";
+import * as net from "../src/lib/functions/net";
 import QrCode from "qrcode";
 
 dotenv.config({ path: '.env.local' });

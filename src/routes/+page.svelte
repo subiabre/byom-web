@@ -1,8 +1,9 @@
 <script lang="ts">
     import { createApiClient } from "$lib/functions/api";
+    import { createNetFrom } from "$lib/functions/net";
     import { onMount } from "svelte";
 
-    let api = createApiClient(import.meta.env);
+    let api = createApiClient(createNetFrom(import.meta.env).api.addr);
     let users = [{ username: "user" }];
 
     onMount(async () => {

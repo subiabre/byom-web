@@ -3,10 +3,10 @@
     import { createApiClient } from "$lib/functions/api";
     import parser from "ua-parser-js";
     import { onMount } from "svelte";
-    import { userSockets } from "$lib/stores/user-sockets";
     import { user } from "$lib/stores/user";
+    import { createNetFrom } from "$lib/functions/net";
 
-    let api = createApiClient(import.meta.env);
+    let api = createApiClient(createNetFrom(import.meta.env).api.addr);
     let userSessions: any[] = [];
 
     onMount(async () => {
