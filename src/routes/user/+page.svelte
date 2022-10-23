@@ -26,7 +26,13 @@
                                 ...data,
                                 dateCreated: new Date(data.dateCreated),
                                 dateExpires: new Date(data.dateExpires),
-                                userAgent: parser(data.userAgent),
+                                userAgent: ((userAgent) => {
+                                    const parsed = parser(userAgent);
+
+                                    if (!parsed?.browser.name) return userAgent;
+
+                                    return `${parsed.browser.name} ${parsed.browser.version} on ${parsed.os.name}`;
+                                })(data.userAgent),
                             };
                         })
                     );
@@ -54,9 +60,7 @@
         {#each userSessions as userSession}
             <li class="block">
                 <h3 class="title is-6">
-                    {userSession.userAgent.browser.name}
-                    {userSession.userAgent.browser.version} on
-                    {userSession.userAgent.os.name}
+                    {userSession.userAgent}
                 </h3>
                 <div class="subtitle is-6">
                     <p title={ userSession.dateCreated.toLocaleString() }>
