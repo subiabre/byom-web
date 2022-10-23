@@ -3,13 +3,13 @@
     import { createApiClient } from "$lib/functions/api";
     import parser from "ua-parser-js";
     import { onMount } from "svelte";
-    import { UserSocketsStore } from "$lib/socket-io/events/user-sockets-event";
+    import { userSockets } from "$lib/socket-io/events/user-sockets";
 
     let api = createApiClient(import.meta.env);
     let user = { username: "" };
     let userSessions: any[] = [];
 
-    UserSocketsStore.subscribe((data) => console.log(data.list));
+    userSockets.subscribe((data) => console.log(data.list));
 
     onMount(async () => {
         const response = await api.get("/auth/user");

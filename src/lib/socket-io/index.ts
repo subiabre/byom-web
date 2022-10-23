@@ -1,8 +1,8 @@
-import { io, Socket } from "socket.io-client";
-import { UserSocketsEvent } from "./events/user-sockets-event";
+import { io } from "socket.io-client";
+import { userSocketsHandler } from "./events/user-sockets";
 
 const socket = io();
 
-UserSocketsEvent.listen(socket);
+userSocketsHandler.io(socket)();
 
 export { socket };

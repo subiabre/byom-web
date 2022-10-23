@@ -1,18 +1,15 @@
-import { createNetFrom } from "../net";
 import { Server } from "socket.io";
-import { loadEnv } from "vite";
 import type { Plugin } from "vite";
-import { UserSigninEvent } from "./events/user-signin-event";
+import { userSigninHandler } from "./events/user-signin";
 
 export function socketio(): Plugin {
     return {
         name: 'socket-io-server',
         configureServer(server) {
-            const net = createNetFrom({ ...process.env, ...loadEnv('mock', process.cwd()) });
-            const io = new Server(server.httpServer || net.web.port);
+            const io = new Server(server.httpServer || 3000);
 
             io.on('connection', async (socket) => {
-                UserSigninEvent.io(io).listen(socket);
+                userSigninHandler.io(io)(socket);
             });
         }
     }
