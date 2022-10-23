@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import type { Plugin } from "vite";
-import { userSocketEvent } from "./events/user-socket-event";
+import { socketRoomEvent } from "./events/socket-room-event";
 
 export function socketio(): Plugin {
     return {
@@ -9,7 +9,7 @@ export function socketio(): Plugin {
             const io = new Server(server.httpServer || 3000);
 
             io.on('connection', async (socket) => {
-                userSocketEvent.server(socket, io);
+                socketRoomEvent.server(socket, io);
             });
         }
     }
