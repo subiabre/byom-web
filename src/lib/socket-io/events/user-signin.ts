@@ -11,13 +11,14 @@ export const userSigninHandler: ServerEventHandler = {
     io(server) {
         return (client) => {
             client.on('user:signin', async (user) => {
-                await client.join(user.username);
+                const room = user.username;
+                await client.join(room);
         
-                const list = await server.in(user.username)
+                const list = await server.in(room)
                     .fetchSockets()
                     .then(sockets => sockets.map(socket=> socket.id));
         
-                client.emit('user:sockets', list);
+                server.to(room).emit('user:sockets', list);
             });
         }
     },
