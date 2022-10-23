@@ -1,23 +1,15 @@
-import { userSockets } from "../../stores/user-sockets";
 import type { SocketioEvent } from ".";
+import { userSockets } from "../../stores/user-sockets";
 
 export const userSocketsEvent: SocketioEvent = {
     client(client) {
-        return {
-            listen() {
-                client.on('user:sockets', (list) => {
-                    console.log(list);
-                    userSockets.update(() => list);
-                });
-            },
-        }
+        client.on('user:sockets', (list) => {
+            console.log(list);
+            userSockets.update(() => list);
+        });
     },
 
     server(server) {
-        return {
-            listen(client) {
-                return;
-            },
-        }
+        return;
     },
 }

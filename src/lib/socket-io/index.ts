@@ -3,6 +3,6 @@ import { userSocketsEvent } from "./events/user-sockets-event";
 
 const socket = io();
 
-userSocketsEvent.client(socket).listen();
+userSocketsEvent.client(socket);
 
 export { socket };

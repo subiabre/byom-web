@@ -9,7 +9,7 @@ export function socketio(): Plugin {
             const io = new Server(server.httpServer || 3000);
 
             io.on('connection', async (socket) => {
-                userSocketEvent.server(io).listen(socket);
+                userSocketEvent.server(socket, io);
             });
         }
     }
