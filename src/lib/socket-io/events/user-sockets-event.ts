@@ -6,6 +6,7 @@ export const userSocketsEvent: SocketioEvent = {
         return {
             listen() {
                 client.on('user:sockets', (list) => {
+                    console.log(list);
                     userSockets.update(() => list);
                 });
             },

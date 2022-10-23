@@ -4,9 +4,9 @@
     import parser from "ua-parser-js";
     import { onMount } from "svelte";
     import { userSockets } from "$lib/stores/user-sockets";
+    import { user } from "$lib/stores/user";
 
     let api = createApiClient(import.meta.env);
-    let user = { username: "" };
     let userSessions: any[] = [];
 
     onMount(async () => {
@@ -14,7 +14,6 @@
 
         switch (response.status) {
             case 204:
-                user = JSON.parse(localStorage.getItem("byom:user") ?? "{}");
                 userSessions = await api
                     .get("/user_sessions")
                     .then((res) => res.json())
@@ -40,8 +39,6 @@
                 goto("/user/signin");
                 break;
         }
-
-        userSockets.subscribe((list) => console.log(list));
     });
 </script>
 
@@ -50,7 +47,7 @@
 </svelte:head>
 
 <div class="container mb-6">
-    <h1 class="title">Hello, {user.username}.</h1>
+    <h1 class="title">Hello, {$user.username}.</h1>
     <p class="subtitle">How you've been?</p>
 </div>
 

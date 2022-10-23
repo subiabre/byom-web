@@ -6,8 +6,8 @@
     let users = [{ username: "user" }];
 
     onMount(async () => {
-        users = await api.get('/users').then(res => res.json());
-    })
+        users = await api.get("/users").then((res) => res.json());
+    });
 </script>
 
 <ul>

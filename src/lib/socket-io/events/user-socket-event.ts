@@ -1,11 +1,10 @@
 import type { SocketioEvent } from ".";
 
-export const userSigninEvent: SocketioEvent = {
+export const userSocketEvent: SocketioEvent = {
     server(server) {
         return {
             listen(client) {
-                client.on('user:signin', async (user) => {
-                    const room = user.username;
+                client.on('user:socket', async (room) => {
                     await client.join(room);
             
                     const list = await server.in(room)

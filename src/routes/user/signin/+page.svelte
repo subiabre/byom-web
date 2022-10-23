@@ -2,6 +2,7 @@
     import { goto } from "$app/navigation";
     import { createApiClient } from "$lib/functions/api";
     import { socket } from "$lib/socket-io";
+    import { user } from "$lib/stores/user";
     import { onMount } from "svelte";
 
     export let data: { token?: string };
@@ -11,41 +12,41 @@
     let username: string;
     let password: string;
 
-    async function isLoggedIn()
-    {
-        return goto('/user');
+    async function isLoggedIn() {
+        return goto("/user");
     }
 
-    async function handleLogin(response: Response)
-    {
+    async function handleLogin(response: Response) {
         switch (response.status) {
             case 204:
-                const user = await api.fetch(response.headers.get('Location') ?? '').then(res => res.json());
-
-                socket.emit('user:signin', user);
-                localStorage.setItem('byom:user', JSON.stringify(user));
-
+                await api
+                    .fetch(response.headers.get("Location") ?? "")
+                    .then((res) => res.json())
+                    .then((data) => user.set(data));
                 return isLoggedIn();
             default:
                 break;
         }
     }
 
-    async function handleSubmit(e: SubmitEvent)
-    {
+    async function handleSubmit(e: SubmitEvent) {
         e.preventDefault();
 
-        const response = await api.post('/auth/user', { jsonBody: { username, password } });
+        const response = await api.post("/auth/user", {
+            jsonBody: { username, password },
+        });
         return handleLogin(response);
     }
 
     onMount(async () => {
         if (data.token) {
-            const response = await api.post('/auth/token', { jsonBody: { token: data.token} });
+            const response = await api.post("/auth/token", {
+                jsonBody: { token: data.token },
+            });
             return handleLogin(response);
         }
 
-        const response = await api.get('/auth/user');
+        const response = await api.get("/auth/user");
         return handleLogin(response);
     });
 </script>
@@ -63,11 +64,23 @@
     <form class="form" on:submit={handleSubmit}>
         <div class="field">
             <label class="label" for="inputUsername">Username</label>
-            <input class="input" type="text" placeholder="username" id="inputUsername" bind:value={username} />
+            <input
+                class="input"
+                type="text"
+                placeholder="username"
+                id="inputUsername"
+                bind:value={username}
+            />
         </div>
         <div class="field">
             <label class="label" for="inputPassword">Password</label>
-            <input class="input" type="password" placeholder="password" id="inputPassword" bind:value={password} />
+            <input
+                class="input"
+                type="password"
+                placeholder="password"
+                id="inputPassword"
+                bind:value={password}
+            />
         </div>
         <div class="field">
             <div class="control">
