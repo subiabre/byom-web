@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  node:
+    container_name: byom-web
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        - NODE_ENTRYPOINT=docker/entrypoint.sh
+    ports:
+      - '${VITE_WEB_PORT:?err}:3000'
+    volumes:
+      - ./:/app
+    restart: on-failure

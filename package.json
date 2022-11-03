@@ -8,7 +8,6 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"print-address": "node ./scripts/print-address.js"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",

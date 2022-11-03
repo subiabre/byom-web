@@ -2,7 +2,7 @@
  * @param {NodeJS.ProcessEnv} env
  * @return {NetAddress}
  */
-export function createNetFrom(env)
+export function createNetFrom(env: ImportMetaEnv): NetAddress
 {
     const base = [
         'http://',

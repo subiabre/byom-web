@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  node:
+    extends:
+      file: docker-compose.yml
+      service: node
+    build:
+      args:
+        - NODE_ENTRYPOINT=docker/entrypoint.dev.sh
