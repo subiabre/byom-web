@@ -8,12 +8,24 @@
 
     let api = createApiClient(createNetFrom(import.meta.env).api.addr);
     let userSessions: any[] = [];
+    let currentSession: any = {};
+
+    function parseUserAgent(userAgent: string) {
+        const parsed = parser(userAgent);
+
+        if (!parsed?.browser.name) return userAgent;
+
+        return `${parsed.browser.name} ${parsed.browser.version} on ${parsed.os.name}`;
+    }
 
     onMount(async () => {
         const response = await api.get("/auth/user");
 
         switch (response.status) {
             case 204:
+                currentSession = await api
+                    .fetch(response.headers.get("Location") ?? "")
+                    .then((res) => res.json());
                 userSessions = await api
                     .get("/user_sessions")
                     .then((res) => res.json())
@@ -23,13 +35,7 @@
                                 ...data,
                                 dateCreated: new Date(data.dateCreated),
                                 dateExpires: new Date(data.dateExpires),
-                                userAgent: ((userAgent) => {
-                                    const parsed = parser(userAgent);
-
-                                    if (!parsed?.browser.name) return userAgent;
-
-                                    return `${parsed.browser.name} ${parsed.browser.version} on ${parsed.os.name}`;
-                                })(data.userAgent),
+                                userAgent: parseUserAgent(data.userAgent),
                             };
                         })
                     );
@@ -60,11 +66,14 @@
                     {userSession.userAgent}
                 </h3>
                 <div class="subtitle is-6">
-                    <p title={ userSession.dateCreated.toLocaleString() }>
-                        Created at: { userSession.dateCreated.toLocaleDateString() }
+                    {#if userSession.id === currentSession.id}
+                        <p>Current</p>
+                    {/if}
+                    <p title={userSession.dateCreated.toLocaleString()}>
+                        Created at: {userSession.dateCreated.toLocaleDateString()}
                     </p>
-                    <p title={ userSession.dateExpires.toLocaleString() }>
-                        Expires at: { userSession.dateExpires.toLocaleDateString() }
+                    <p title={userSession.dateExpires.toLocaleString()}>
+                        Expires at: {userSession.dateExpires.toLocaleDateString()}
                     </p>
                 </div>
             </li>
