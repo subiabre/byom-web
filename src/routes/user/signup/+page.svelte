@@ -5,8 +5,6 @@
     import { user } from "$lib/stores/user";
     import { onMount } from "svelte";
 
-    export let data: { token?: string };
-
     let api = createApiClient(createNetFrom(import.meta.env).api.addr);
 
     let username: string;
@@ -24,10 +22,14 @@
         return isLoggedIn();
     }
 
-    async function handleLogin(response: Response) {
+    async function handleSignup(response: Response) {
         switch (response.status) {
-            case 204:
-                return await loadUser(response);
+            case 201:
+                const auth = await api.post("/auth/user", {
+                    jsonBody: { username, password }
+                });
+
+                return await loadUser(auth);
             default:
                 await response
                     .json()
@@ -39,20 +41,13 @@
     async function handleSubmit(e: SubmitEvent) {
         e.preventDefault();
 
-        const response = await api.post("/auth/user", {
+        const response = await api.post("/users", {
             jsonBody: { username, password },
         });
-        return handleLogin(response);
+        return handleSignup(response);
     }
 
     onMount(async () => {
-        if (data.token) {
-            const response = await api.post("/auth/token", {
-                jsonBody: { token: data.token },
-            });
-            return handleLogin(response);
-        }
-
         const response = await api.get("/auth/user");
         
         switch (response.status) {
@@ -65,12 +60,12 @@
 </script>
 
 <svelte:head>
-    <title>Sign in.</title>
+    <title>Sign up.</title>
 </svelte:head>
 
 <div class="container mb-6">
-    <h1 class="title">Sign in.</h1>
-    <p class="subtitle">Hello there.</p>
+    <h1 class="title">Sign up.</h1>
+    <p class="subtitle">Nice to meet you.</p>
 </div>
 
 <div class="container">
